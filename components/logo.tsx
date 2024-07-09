@@ -6,11 +6,12 @@ const Logo = () => {
 		<div className='flex items-center bg-white p-2'>
 			<h1 className='text-xl tracking-wider font-semibold'>SIAPRAK</h1>
 			<Image
+				priority
 				alt='logo'
-				width={300}
-				height={300}
+				width={200}
+				height={200}
 				src={'/FILKOM.png'}
-                className='w-36'
+				className='w-36'
 			/>
 		</div>
 	);

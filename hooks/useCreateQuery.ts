@@ -5,7 +5,11 @@ const useCreateQuery = (dependency: any, key: string, value: string) => {
 	const params = useSearchParams();
 	return useMemo(() => {
 		const newParams = new URLSearchParams(params.toString());
-		newParams.set(key, value);
+		if(value){
+			newParams.set(key, value);
+		}else{
+			newParams.delete(key)
+		}
 		return newParams.toString();
 	}, [dependency]);
 };

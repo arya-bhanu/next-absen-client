@@ -4,8 +4,8 @@ import { Avatar, Button, Textarea } from '@nextui-org/react';
 import { Select, SelectItem } from '@nextui-org/react';
 import { siteConfig } from '../../config/site';
 import { useCallback, useEffect, useState } from 'react';
-import EmptyAbsensiState from '@/components/empty-absensi-state';
-import ListContainerAbsensi from '@/components/list-container-absensi';
+import EmptyAbsensiState from '@/app/(home)/(_components)/empty-absensi-state';
+import ListContainerAbsensi from '@/app/(home)/(_components)/list-container-absensi';
 import { ApprovalStatus } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useCreateQuery from '@/hooks/useCreateQuery';
@@ -20,18 +20,37 @@ export interface IListAbsensiData {
 	class_finished_at: Date;
 	nth_meeting: number;
 	is_recorded: boolean;
+	topic: string;
+	information?: string;
+	class_image: string;
 }
 
 const dataListAbsensi: IListAbsensiData[] = [
 	{
 		id: 1,
 		is_recorded: false,
-		class_finished_at: new Date(),
-		class_started_at: new Date(),
+		class_finished_at: new Date(1720510400),
+		class_started_at: new Date(1720510400),
 		course: 'Pemrograman Web Dasar',
 		course_code_class: 'CSD234',
 		created_by: 'Putu Gde Arya Bhanuartha',
 		nth_meeting: 1,
+		topic: 'Dasar PHP',
+		information: 'Memberikan latihan modul soal PHP',
+		class_image: '/img/web.jpg',
+	},
+	{
+		id: 2,
+		is_recorded: false,
+		class_finished_at: new Date(1720510400),
+		class_started_at: new Date(1720510400),
+		course: 'Pemrograman Web Dasar',
+		course_code_class: 'CSD234',
+		created_by: 'Putu Gde Arya Bhanuartha',
+		nth_meeting: 2,
+		topic: 'Dasar PHP dan Dasar pemrograman Client Web',
+		information: 'Memberikan latihan modul soal PHP',
+		class_image: '/img/web.jpg',
 	},
 ];
 
@@ -39,8 +58,9 @@ export default function Home() {
 	const params = useSearchParams();
 	const router = useRouter();
 	const qfilter = params.get('qfilter');
+
 	const [selectedFilter, setSelectedFilter] = useState(
-		new Set([qfilter ? qfilter : 'ongoing'])
+		new Set([qfilter ? qfilter : ''])
 	);
 	const queryCreated = useCreateQuery(
 		selectedFilter,
@@ -48,25 +68,14 @@ export default function Home() {
 		Array.from(selectedFilter)[0]
 	);
 	useEffect(() => {
-		router.replace(`?${queryCreated}`);
+		router.replace(`?${queryCreated}`, { scroll: false });
 	}, [selectedFilter]);
-
 	const handleSelectionChange = useCallback(
 		(e: any) => {
 			setSelectedFilter(new Set([e.target.value]));
 		},
 		[selectedFilter]
 	);
-
-	const handleCreateQuery = useCallback(
-		(key: string, value: string) => {
-			const newParams = new URLSearchParams(params.toString());
-			newParams.set(key, value);
-			return newParams.toString();
-		},
-		[selectedFilter]
-	);
-
 	return (
 		<section className='flex flex-col gap-y-5'>
 			<BasicContainer>
@@ -87,7 +96,7 @@ export default function Home() {
 					/>
 					<Button
 						type='submit'
-						className='w-fit block ml-auto'
+						className='w-fit block ml-auto mt-2'
 						variant='shadow'
 						color='primary'
 					>
@@ -99,7 +108,7 @@ export default function Home() {
 				<h1 className='text-3xl mt-4 mb-3'>Absensi Hari Ini</h1>
 				<Select
 					size='sm'
-					label='Filter Absensi'
+					label='Semua Absensi'
 					selectedKeys={selectedFilter}
 					onChange={handleSelectionChange}
 					className='max-w-xs'
@@ -110,7 +119,10 @@ export default function Home() {
 				</Select>
 				<div className='mb-6'>
 					{/* <EmptyAbsensiState /> */}
-					<ListContainerAbsensi className='mt-8' />
+					<ListContainerAbsensi
+						listAbsensiData={dataListAbsensi}
+						className='mt-8'
+					/>
 				</div>
 			</BasicContainer>
 		</section>

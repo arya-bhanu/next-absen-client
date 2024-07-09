@@ -3,8 +3,6 @@ import Logo from '@/components/logo';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
 import SidebarButton from './sidebar-btn';
-import { Button, ButtonGroup } from '@nextui-org/button';
-import { IoIosLogOut } from 'react-icons/io';
 
 const Sidebar = () => {
 	return (
@@ -17,7 +15,7 @@ const Sidebar = () => {
 					return <SidebarButton link={el.href}>{el.label}</SidebarButton>;
 				})}
 			</div>
-			<ButtonGroup className='px-2 absolute bottom-3 w-full'>
+			{/* <ButtonGroup className='px-2 absolute bottom-3 w-full'>
 				<Button
 					color='danger'
 					variant='shadow'
@@ -26,7 +24,7 @@ const Sidebar = () => {
 				>
 					Logout
 				</Button>
-			</ButtonGroup>
+			</ButtonGroup> */}
 		</nav>
 	);
 };

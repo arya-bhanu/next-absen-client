@@ -22,10 +22,23 @@ export const siteConfig = {
 		},
 	],
 	filterItems: [
-		{ label: 'Semua', key: 'all' },
 		{ label: 'Terlewat', key: 'overdue' },
 		{ label: 'Sedang Berjalan', key: 'ongoing' },
 		{ label: 'Sudah Terekam', key: 'recorded' },
+	],
+	attendanceStatus: [
+		{
+			label: 'Hadir',
+			key: 'present',
+		},
+		{
+			label: 'Izin',
+			key: 'permission',
+		},
+		{
+			label: 'Sakit',
+			key: 'Sick',
+		},
 	],
 	navMenuItems: [
 		{

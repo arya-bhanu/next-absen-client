@@ -9,7 +9,7 @@ const BasicContainer = ({
 	className?: string;
 }) => {
 	return (
-		<div className={clsx(['p-4 rounded-lg bg-white shadow-lg', className])}>
+		<div className={clsx(['py-4 px-7 rounded-lg bg-white shadow-lg', className])}>
 			{children}
 		</div>
 	);
