@@ -25,6 +25,7 @@ export const siteConfig = {
 		{ label: 'Semua', key: 'all' },
 		{ label: 'Terlewat', key: 'overdue' },
 		{ label: 'Sedang Berjalan', key: 'ongoing' },
+		{ label: 'Sudah Terekam', key: 'recorded' },
 	],
 	navMenuItems: [
 		{

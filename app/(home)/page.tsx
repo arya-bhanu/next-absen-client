@@ -1,17 +1,72 @@
 'use client';
 import BasicContainer from '@/components/basic-container';
-import { Avatar, Button, Textarea, SelectSection } from '@nextui-org/react';
+import { Avatar, Button, Textarea } from '@nextui-org/react';
 import { Select, SelectItem } from '@nextui-org/react';
 import { siteConfig } from '../../config/site';
-import { useState } from 'react';
-import Image from 'next/image';
+import { useCallback, useEffect, useState } from 'react';
 import EmptyAbsensiState from '@/components/empty-absensi-state';
-export default function Home() {
-	const [selectedFilter, setSelectedFilter] = useState(new Set(['ongoing']));
+import ListContainerAbsensi from '@/components/list-container-absensi';
+import { ApprovalStatus } from '@/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import useCreateQuery from '@/hooks/useCreateQuery';
 
-	const handleSelectionChange = (e: any) => {
-		setSelectedFilter(new Set([e.target.value]));
-	};
+export interface IListAbsensiData {
+	id: number;
+	course_code_class: string;
+	course: string;
+	approved_status?: ApprovalStatus;
+	created_by: string;
+	class_started_at: Date;
+	class_finished_at: Date;
+	nth_meeting: number;
+	is_recorded: boolean;
+}
+
+const dataListAbsensi: IListAbsensiData[] = [
+	{
+		id: 1,
+		is_recorded: false,
+		class_finished_at: new Date(),
+		class_started_at: new Date(),
+		course: 'Pemrograman Web Dasar',
+		course_code_class: 'CSD234',
+		created_by: 'Putu Gde Arya Bhanuartha',
+		nth_meeting: 1,
+	},
+];
+
+export default function Home() {
+	const params = useSearchParams();
+	const router = useRouter();
+	const qfilter = params.get('qfilter');
+	const [selectedFilter, setSelectedFilter] = useState(
+		new Set([qfilter ? qfilter : 'ongoing'])
+	);
+	const queryCreated = useCreateQuery(
+		selectedFilter,
+		'qfilter',
+		Array.from(selectedFilter)[0]
+	);
+	useEffect(() => {
+		router.replace(`?${queryCreated}`);
+	}, [selectedFilter]);
+
+	const handleSelectionChange = useCallback(
+		(e: any) => {
+			setSelectedFilter(new Set([e.target.value]));
+		},
+		[selectedFilter]
+	);
+
+	const handleCreateQuery = useCallback(
+		(key: string, value: string) => {
+			const newParams = new URLSearchParams(params.toString());
+			newParams.set(key, value);
+			return newParams.toString();
+		},
+		[selectedFilter]
+	);
+
 	return (
 		<section className='flex flex-col gap-y-5'>
 			<BasicContainer>
@@ -54,7 +109,8 @@ export default function Home() {
 					})}
 				</Select>
 				<div className='mb-6'>
-					<EmptyAbsensiState />
+					{/* <EmptyAbsensiState /> */}
+					<ListContainerAbsensi className='mt-8' />
 				</div>
 			</BasicContainer>
 		</section>
