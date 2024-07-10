@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {
+	forwardRef,
+	useImperativeHandle,
+	useRef,
+	useState,
+} from 'react';
 import { IListAbsensiData } from '../page';
 import Image from 'next/image';
 import { FaChalkboardTeacher } from 'react-icons/fa';
+
 import {
 	Card,
 	CardHeader,
@@ -14,9 +20,36 @@ import {
 	Chip,
 } from '@nextui-org/react';
 import { siteConfig } from '@/config/site';
+import ModalAbsensi from './modal-absensi';
 const ListAbsensi = (props: IListAbsensiData) => {
+	const modalRef = useRef(null);
+	const [statusAttendance, setStatusAttendance] = useState(new Set(['']));
+
+	async function handleClickSubmit() {
+		const selectedStatus = Array.from(statusAttendance)[0];
+		if (selectedStatus) {
+			switch (selectedStatus) {
+				case 'present':
+					await handlePresentStatus();
+					break;
+				case 'permission':
+					break;
+				case 'sick':
+					break;
+				default:
+					return;
+			}
+		}
+	}
+
+	async function handlePresentStatus() {
+		let mediaDevices = navigator.mediaDevices;
+		(modalRef.current as any).handleOpenModal();
+	}
+
 	return (
 		<li>
+			<ModalAbsensi ref={modalRef} />
 			<Card>
 				<CardHeader className='flex gap-4 flex-col items-start'>
 					<h1 className='text-lg font-semibold'>
@@ -59,6 +92,10 @@ const ListAbsensi = (props: IListAbsensiData) => {
 					<Select
 						label='Status Kehadiran'
 						className='max-w-xs'
+						defaultSelectedKeys={statusAttendance}
+						onSelectionChange={(keys) =>
+							setStatusAttendance(keys as Set<string>)
+						}
 						size='sm'
 					>
 						{siteConfig.attendanceStatus.map((el) => {
@@ -79,6 +116,8 @@ const ListAbsensi = (props: IListAbsensiData) => {
 							</Chip>
 						</div>
 						<Button
+							onClick={handleClickSubmit}
+							isDisabled={!Array.from(statusAttendance)[0]}
 							color='success'
 							className=' text-white block w-fit ml-auto'
 						>
