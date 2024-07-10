@@ -62,20 +62,26 @@ export default function Home() {
 	const [selectedFilter, setSelectedFilter] = useState(
 		new Set([qfilter ? qfilter : ''])
 	);
+
+	console.log(selectedFilter)
+
 	const queryCreated = useCreateQuery(
 		selectedFilter,
 		'qfilter',
 		Array.from(selectedFilter)[0]
 	);
+
 	useEffect(() => {
 		router.replace(`?${queryCreated}`, { scroll: false });
 	}, [selectedFilter]);
+
 	const handleSelectionChange = useCallback(
 		(e: any) => {
 			setSelectedFilter(new Set([e.target.value]));
 		},
 		[selectedFilter]
 	);
+	
 	return (
 		<section className='flex flex-col gap-y-5'>
 			<BasicContainer>

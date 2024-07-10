@@ -1,9 +1,4 @@
-import React, {
-	forwardRef,
-	useImperativeHandle,
-	useRef,
-	useState,
-} from 'react';
+import React, { useRef, useState } from 'react';
 import { IListAbsensiData } from '../page';
 import Image from 'next/image';
 import { FaChalkboardTeacher } from 'react-icons/fa';
@@ -21,16 +16,24 @@ import {
 } from '@nextui-org/react';
 import { siteConfig } from '@/config/site';
 import ModalAbsensi from './modal-absensi';
+import { toast } from 'react-toastify';
 const ListAbsensi = (props: IListAbsensiData) => {
 	const modalRef = useRef(null);
 	const [statusAttendance, setStatusAttendance] = useState(new Set(['']));
+	const [coordinate, setCoordinate] = useState<
+		| {
+				long: number;
+				lat: number;
+		  }
+		| undefined
+	>(undefined);
 
 	async function handleClickSubmit() {
 		const selectedStatus = Array.from(statusAttendance)[0];
 		if (selectedStatus) {
 			switch (selectedStatus) {
 				case 'present':
-					await handlePresentStatus();
+					getLocation();
 					break;
 				case 'permission':
 					break;
@@ -43,13 +46,42 @@ const ListAbsensi = (props: IListAbsensiData) => {
 	}
 
 	async function handlePresentStatus() {
-		let mediaDevices = navigator.mediaDevices;
-		(modalRef.current as any).handleOpenModal();
+		try {
+			let stream = await navigator.mediaDevices.getUserMedia({
+				video: true,
+				audio: false,
+			});
+			await (modalRef.current as any).handleOpenModal();
+		} catch (err) {
+			toast.error('Please allow your camera');
+		}
+	}
+
+	function getLocation() {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition, () => {
+				toast.error('Please allow browser location');
+			});
+		} else {
+			toast.error('Browser or device not supported for geolocation');
+		}
+	}
+
+	async function showPosition(position: any) {
+		setCoordinate({
+			lat: position.coords.latitude as number,
+			long: position.coords.longitude as number,
+		});
+		await handlePresentStatus();
 	}
 
 	return (
 		<li>
-			<ModalAbsensi ref={modalRef} />
+			<ModalAbsensi
+				coordinate={coordinate}
+				statusAttendance={statusAttendance}
+				ref={modalRef}
+			/>
 			<Card>
 				<CardHeader className='flex gap-4 flex-col items-start'>
 					<h1 className='text-lg font-semibold'>
