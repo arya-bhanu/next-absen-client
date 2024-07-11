@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const PengajuanKetidakhadiranPage = () => {
-  return (
-    <div>PengajuanKetidakHadiranPage</div>
-  )
-}
+  return <div>PengajuanKetidakHadiranPage</div>;
+};
 
-export default PengajuanKetidakhadiranPage
+export default PengajuanKetidakhadiranPage;

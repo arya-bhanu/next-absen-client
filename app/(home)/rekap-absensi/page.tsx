@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const RekapAbsensiPage = () => {
-  return (
-    <div>RekapAbsensiPage</div>
-  )
-}
+  return <div>RekapAbsensiPage</div>;
+};
 
-export default RekapAbsensiPage
+export default RekapAbsensiPage;
