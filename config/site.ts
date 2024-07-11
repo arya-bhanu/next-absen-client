@@ -37,7 +37,7 @@ export const siteConfig = {
 		},
 		{
 			label: 'Sakit',
-			key: 'Sick',
+			key: 'sick',
 		},
 	],
 	navMenuItems: [

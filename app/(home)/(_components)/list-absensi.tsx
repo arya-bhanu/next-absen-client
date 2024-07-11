@@ -30,14 +30,17 @@ const ListAbsensi = (props: IListAbsensiData) => {
 
 	async function handleClickSubmit() {
 		const selectedStatus = Array.from(statusAttendance)[0];
+		console.log(selectedStatus)
 		if (selectedStatus) {
 			switch (selectedStatus) {
 				case 'present':
-					getLocation();
+					handlePresentStatus();
 					break;
 				case 'permission':
+					handleNotAttendance();
 					break;
 				case 'sick':
+					handleNotAttendance();
 					break;
 				default:
 					return;
@@ -46,15 +49,13 @@ const ListAbsensi = (props: IListAbsensiData) => {
 	}
 
 	async function handlePresentStatus() {
-		try {
-			let stream = await navigator.mediaDevices.getUserMedia({
-				video: true,
-				audio: false,
-			});
-			await (modalRef.current as any).handleOpenModal();
-		} catch (err) {
-			toast.error('Please allow your camera');
-		}
+		getLocation();
+		await (modalRef.current as any).handleOpenModal();
+	}
+
+	async function handleNotAttendance() {
+		getLocation();
+		await (modalRef.current as any).handleOpenModal();
 	}
 
 	function getLocation() {
@@ -72,7 +73,6 @@ const ListAbsensi = (props: IListAbsensiData) => {
 			lat: position.coords.latitude as number,
 			long: position.coords.longitude as number,
 		});
-		await handlePresentStatus();
 	}
 
 	return (
@@ -139,10 +139,15 @@ const ListAbsensi = (props: IListAbsensiData) => {
 				<CardFooter className='flex flex-col items-start'>
 					<p className='text-default-500'>{props.information}</p>
 					<div className='w-full flex justify-between mt-5 items-center'>
-						<div className='flex gap-3'>
+						<div className='flex h-5 items-center gap-2'>
+							<Chip color='success'>
+								{props.class_started_at.toLocaleDateString()}
+							</Chip>
+							<Divider orientation='vertical' />
 							<Chip color='primary'>
 								{props.class_started_at.toLocaleTimeString()}
 							</Chip>
+							<Divider orientation='vertical' />
 							<Chip color='danger'>
 								{props.class_finished_at.toLocaleTimeString()}
 							</Chip>

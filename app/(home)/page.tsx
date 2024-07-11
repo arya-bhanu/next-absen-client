@@ -1,14 +1,16 @@
 'use client';
 import BasicContainer from '@/components/basic-container';
-import { Avatar, Button, Textarea } from '@nextui-org/react';
+import { Avatar, Button, modal, Textarea } from '@nextui-org/react';
 import { Select, SelectItem } from '@nextui-org/react';
 import { siteConfig } from '../../config/site';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import EmptyAbsensiState from '@/app/(home)/(_components)/empty-absensi-state';
 import ListContainerAbsensi from '@/app/(home)/(_components)/list-container-absensi';
 import { ApprovalStatus } from '@/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useCreateQuery from '@/hooks/useCreateQuery';
+import { CiCirclePlus } from 'react-icons/ci';
+import ModalTambahKelas from './(_components)/modal-tambah-kelas';
 
 export interface IListAbsensiData {
 	id: number;
@@ -29,8 +31,8 @@ const dataListAbsensi: IListAbsensiData[] = [
 	{
 		id: 1,
 		is_recorded: false,
-		class_finished_at: new Date(1720510400),
-		class_started_at: new Date(1720510400),
+		class_finished_at: new Date(1720667661000),
+		class_started_at: new Date(1720667661000),
 		course: 'Pemrograman Web Dasar',
 		course_code_class: 'CSD234',
 		created_by: 'Putu Gde Arya Bhanuartha',
@@ -42,8 +44,8 @@ const dataListAbsensi: IListAbsensiData[] = [
 	{
 		id: 2,
 		is_recorded: false,
-		class_finished_at: new Date(1720510400),
-		class_started_at: new Date(1720510400),
+		class_finished_at: new Date(1720667661000),
+		class_started_at: new Date(1720667661000),
 		course: 'Pemrograman Web Dasar',
 		course_code_class: 'CSD234',
 		created_by: 'Putu Gde Arya Bhanuartha',
@@ -58,12 +60,11 @@ export default function Home() {
 	const params = useSearchParams();
 	const router = useRouter();
 	const qfilter = params.get('qfilter');
+	const modalTambahKelasRef = useRef(null);
 
 	const [selectedFilter, setSelectedFilter] = useState(
 		new Set([qfilter ? qfilter : ''])
 	);
-
-	console.log(selectedFilter)
 
 	const queryCreated = useCreateQuery(
 		selectedFilter,
@@ -81,10 +82,18 @@ export default function Home() {
 		},
 		[selectedFilter]
 	);
-	
+
+	function handleClickTambahKelas() {
+		const modalEl = modalTambahKelasRef.current as any;
+		if (modalEl) {
+			modalEl.openModalTambahKelas();
+		}
+	}
+
 	return (
 		<section className='flex flex-col gap-y-5'>
-			<BasicContainer>
+			<ModalTambahKelas ref={modalTambahKelasRef} />
+			<BasicContainer className='flex flex-col gap-y-4'>
 				<figure className='flex justify-between items-center'>
 					<div>
 						<h1 className='text-3xl font-semibold'>Welcome</h1>
@@ -95,6 +104,14 @@ export default function Home() {
 						src='/img/404.jpg'
 					/>
 				</figure>
+				<Button
+					onClick={handleClickTambahKelas}
+					startContent={<CiCirclePlus size={20} />}
+					color='success'
+					className='w-fit'
+				>
+					Tambah Kelas
+				</Button>
 				<form className='mt-2 flex flex-col gap-y-2'>
 					<Textarea
 						placeholder="It's your secret"
