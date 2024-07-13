@@ -145,7 +145,9 @@ const ModalAbsensi = (props: IModalAbsensi, ref: React.Ref<any>) => {
                 height="240"
                 id="video"
                 width="320"
-              />
+              >
+                <track kind="captions" />
+              </video>
               <canvas
                 ref={canvas}
                 className={clsx(

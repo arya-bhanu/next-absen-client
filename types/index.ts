@@ -33,8 +33,3 @@ export type ClassMeeting = Datetime & {
 };
 
 // API Types
-export enum ApprovalStatus {
-  granted = "Disetujui",
-  rejected = "Ditolak",
-  waiting = "Menunggu",
-}

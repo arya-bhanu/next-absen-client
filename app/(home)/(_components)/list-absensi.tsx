@@ -52,25 +52,29 @@ const ListAbsensi = (props: IListAbsensiData) => {
 
   async function handlePresentStatus() {
     getLocation();
-    await (modalRef.current as any).handleOpenModal();
   }
 
   async function handleNotAttendance() {
     getLocation();
-    await (modalRef.current as any).handleOpenModal();
   }
 
   function getLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition, () => {
-        toast.error("Please allow browser location");
-      });
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          setPositionCoordinate(position);
+          await (modalRef.current as any).handleOpenModal();
+        },
+        () => {
+          toast.error("Please allow browser location");
+        },
+      );
     } else {
       toast.error("Browser or device not supported for geolocation");
     }
   }
 
-  async function showPosition(position: any) {
+  async function setPositionCoordinate(position: any) {
     setCoordinate({
       lat: position.coords.latitude as number,
       long: position.coords.longitude as number,

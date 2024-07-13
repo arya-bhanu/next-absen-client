@@ -8,9 +8,10 @@ import { CiCirclePlus } from "react-icons/ci";
 import { siteConfig } from "../../config/site";
 
 import ModalTambahKelas from "./(_components)/modal-tambah-kelas";
+import ListContainerRecorded from "./(_components)/list-container-recorded";
 
 import ListContainerAbsensi from "@/app/(home)/(_components)/list-container-absensi";
-import { ApprovalStatus } from "@/types";
+import { ApprovalStatus, AttendanceStatus } from "@/enums";
 import useCreateQuery from "@/hooks/useCreateQuery";
 import BasicContainer from "@/components/basic-container";
 
@@ -28,6 +29,11 @@ export interface IListAbsensiData {
   information?: string;
   class_image: string;
 }
+
+export type IListRecordedAbsensiData = IListAbsensiData & {
+  attendance_status_request: AttendanceStatus;
+  attendance_status_final?: AttendanceStatus;
+};
 
 const dataListAbsensi: IListAbsensiData[] = [
   {
@@ -55,6 +61,56 @@ const dataListAbsensi: IListAbsensiData[] = [
     topic: "Dasar PHP dan Dasar pemrograman Client Web",
     information: "Memberikan latihan modul soal PHP",
     class_image: "/img/web.jpg",
+  },
+];
+
+const dataListRecordedAbsensi: IListRecordedAbsensiData[] = [
+  {
+    id: 1,
+    is_recorded: false,
+    class_finished_at: new Date(1720667661000),
+    class_started_at: new Date(1720667661000),
+    course: "Pemrograman Web Dasar",
+    course_code_class: "CSD234",
+    created_by: "Putu Gde Arya Bhanuartha",
+    nth_meeting: 2,
+    topic: "Dasar PHP dan Dasar pemrograman Client Web",
+    information: "Memberikan latihan modul soal PHP",
+    class_image: "/img/web.jpg",
+    attendance_status_request: AttendanceStatus.present,
+    approved_status: ApprovalStatus.granted,
+    attendance_status_final: AttendanceStatus.present,
+  },
+  {
+    id: 2,
+    is_recorded: false,
+    class_finished_at: new Date(1720667661000),
+    class_started_at: new Date(1720667661000),
+    course: "Pemrograman Web Dasar",
+    course_code_class: "CSD234",
+    created_by: "Putu Gde Arya Bhanuartha",
+    nth_meeting: 2,
+    topic: "Dasar PHP dan Dasar pemrograman Client Web",
+    information: "Memberikan latihan modul soal PHP",
+    class_image: "/img/web.jpg",
+    attendance_status_request: AttendanceStatus.sick,
+    approved_status: ApprovalStatus.waiting,
+  },
+  {
+    id: 3,
+    is_recorded: false,
+    class_finished_at: new Date(1720667661000),
+    class_started_at: new Date(1720667661000),
+    course: "Pemrograman Web Dasar",
+    course_code_class: "CSD234",
+    created_by: "Putu Gde Arya Bhanuartha",
+    nth_meeting: 2,
+    topic: "Dasar PHP dan Dasar pemrograman Client Web",
+    information: "Memberikan latihan modul soal PHP",
+    class_image: "/img/web.jpg",
+    attendance_status_request: AttendanceStatus.permission,
+    approved_status: ApprovalStatus.rejected,
+    attendance_status_final: AttendanceStatus.alpha,
   },
 ];
 
@@ -145,6 +201,10 @@ export default function Home() {
           <ListContainerAbsensi
             className="mt-8"
             listAbsensiData={dataListAbsensi}
+          />
+          <ListContainerRecorded
+            className="mt-8"
+            listAbsensiDataRecorded={dataListRecordedAbsensi}
           />
         </div>
       </BasicContainer>
